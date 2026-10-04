@@ -8,6 +8,7 @@ dist-ssr/
 build/
 target/
 **/target/
+.vite/
 
 # Temporary and Scratch files
 temp*.js
