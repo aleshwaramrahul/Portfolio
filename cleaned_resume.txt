@@ -1,0 +1,70 @@
+
+
+=== PAGE 1 === Aleshwaram Rahul Software Developer | Full-Stack, Java & Node.js Hyderabad, Telangana, India | 91 7674885265 | aleshwaramrahul@gmail.com 
+
+### Professional Summary
+ Results-driven Software Developer with strong competencies in full-stack web development, backend microservices, and AI-driven workflow automation. Hands-on experience architecting scalable applications using Java Spring Boot, Core Java HTTP servers), JavaScript/TypeScript Node.js, Express, React, Next.js), and databases PostgreSQL, MySQL, SQLite). Proven track record of developing end-to-end automation pipelines, RESTful APIs, enterprise workforce workflows, and responsive user interfaces, complemented by professional experience in technical troubleshooting and cross-functional collaboration. 
+
+### Technical Skills
+ 
+•  Core Languages: Java, TypeScript, SQL, HTML5, CSS3 
+•  Backend & Server Automation: Spring Boot, Spring MVC, Node.js, Hibernate, RESTful APIs, Gemini API 
+•  Frontend & UI Engineering: React 18/19, Next.js, Vite, Tailwind CSS, Lucide React 
+•  Databases & Media: PostgreSQL, MySQL, SQLite, Supabase, Sharp 
+•  Developer Tools & Tooling: Git / GitHub, Postman, Maven, IntelliJ IDEA, VS Code, Antigravity 
+•  Core Concepts & Architecture: OOP, DSA, System Design, Microservices 
+
+=== PAGE 2 === 
+
+### Technical Projects
+ NexusHR WorkforceOS – Human Resource & Workforce Management System Technologies: React 18, TypeScript, Vite, Tailwind CSS, Supabase PostgreSQL, Supabase Auth / SMTP, Edge Functions 
+•  Engineered an enterprise workforce management platform featuring Role-Based Access Control RBAC with dedicated Admin and Employee self-service portals. 
+•  Implemented core modules for employee onboarding with auto-generated IDs, task lifecycle management (priority levels, status progression, comment threads), and leave approval workflows with attachments. 
+•  Built real-time attendance tracking with automatic working hours calculation, status classification Present, Absent, Late, Leave), and exportable workforce analytics reports. 
+•  Integrated automated transactional email delivery using native Supabase Auth SMTP GoTrue mailer) and Edge Functions to dispatch secure onboarding invitations, token activation links, and password reset lifecycles. 
+•  Designed resilient state persistence combining Supabase PostgreSQL with local storage fallbacks for seamless offline/online operation. Glowora Skincare – ECommerce Web Application & Java Static HTTP Server Technologies: Java 25, React 18, Vite 5, Tailwind CSS, Lucide React, JavaScript, HTML5/CSS3 
+•  Designed and built a modern, responsive single-page e-commerce application for a botanical skincare brand featuring category filtering, product quick-view modals, and routine video showcases. 
+•  Engineered a lightweight static HTTP server in pure Java 25 handling SPA fallback routing to serve production build distribution assets on port 8080 without external web server dependencies. 
+•  Created custom Java build utilities AssetExtractor, CopyLocalAssets) to organize, process, and optimize product imagery assets during the deployment pipeline. 
+
+=== PAGE 3 === 
+•  Implemented client-side shopping bag workflows with dynamic quantity controls, free-shipping threshold calculations, and animated order confirmation toast notifications. Autonomous AI Media Engine & Content Pipeline - JoyBoyJutsu Technologies: Next.js 16, React 19, Node.js, Express, Google Gemini API, SQLite, Sharp, Canvas, Instagram Graph API 
+•  Engineered a fully autonomous multi-agent media pipeline that scrapes viral content, synthesizes structured copy via Google Gemini AI, and renders 10801080px carousel slides for scheduled Instagram publication. 
+•  Built a fault-tolerant scraping engine across AniList GraphQL, Reddit, and RSS feeds using cheerio and rss-parser, applying a custom scoring algorithm to identify top trending topics. 
+•  Developed a server-side graphics rendering engine using node-canvas and sharp to dynamically generate branded multi-slide graphics with automated layout calculation and typography. 
+•  Automated publishing workflows via the Instagram Graph API and node-cron with transactional SQLite state tracking and an isolated sandbox preview mode. 
+•  Designed an administrative monitoring dashboard in Next.js with Tailwind CSS and Recharts to track pipeline logs, inspect generated carousels, and review post performance metrics. ONECHECK CAREER COPILOT – AIFirst Career Copilot & Job Application Assistant Architected an AI-first, enterprise-grade Career Copilot and Job Application Assistant providing job seekers with a streamlined, chat-centric platform to manage multi-version resumes, analyze job postings, track applications, and leverage real-time streaming AI tailored to verified user data. 
+•  Built a chat-centric operational hub with real-time SSE AI token streaming via OpenRouter API Gateway, using dynamic user context injection (resumes, job requirements, company intel). 
+•  Developed a resilient Spring Boot 3 & Java 21 backend engine implementing Stateless JWT SHA512 authentication, BCrypt password encryption, Spring Data JPA, and Hibernate. 
+
+=== PAGE 4 === 
+•  Implemented an intelligent resume parsing engine with keyword match scoring, salary/skill-gap analysis against job descriptions, and custom AI cover letter / outreach email generation. 
+•  Constructed Kanban & list application pipelines, company intelligence tracking hubs, productivity tools with STAR-method interview builders, and full GDPR privacy export/deletion controls. 
+•  Containerized the entire multi-tier system React 19 Vite TS frontend, Spring Boot 3 REST API, MySQL 8.0 with HikariCP pool) using Docker & Docker Compose. Technologies: Java 21, Spring Boot 3, Spring Security JWT, Spring Data JPA, Hibernate, MySQL 8.0, React 19, TypeScript, Vite, Tailwind CSS, Zustand, OpenRouter AI, Docker WhatNow – Autonomous City Discovery & AI Concierge Architected an autonomous city discovery and AI concierge platform for Indian metropolitan capitals and heritage districts featuring real-time event discovery, PostGIS spatial mapping, weekend getaway planners, and multi-AI provider consensus. 
+•  Engineered the AskNowEngine AI City Concierge grounded in Indian heritage boundaries and state capitals using spatial PostGIS queries for real-time localized traveler guidance. 
+•  Architected a resilient Multi-AI Provider Manager with automated fallback chains OpenRouter ↔ Google Gemini) and multi-AI consensus pipelines for validating high-impact cultural data. 
+•  Built the WorkAgent 18-step autonomous data discovery engine with background cron schedulers to discover/scrape events, reconcile duplicates, and track entity histories atomically. 
+•  Implemented automated EventExpirationService with a 30-minute grace period triggering status lifecycles via custom Supabase PostGIS RPC database functions. 
+•  Designed a reactive multi-city React 19 UI with Tailwind CSS ("Editorial Terroir" aesthetic), interactive spatial spotlights, category-filtered event discovery, and custom itinerary manifestos. Technologies: React 19, Vite 8, Node.js, Supabase PostgreSQL, PostGIS, Google Gemini API, OpenRouter API, Tailwind CSS, Lucide Icons, Oxlint, Cron Schedulers 
+
+=== PAGE 5 === Professional Experience Equitron Medica Private Limited | Hyderabad, Telangana Trainee Engineer – Customer Support | Dec 2024 – Jul 2025 
+•  Collaborated with engineering teams and field technicians to troubleshoot and resolve client technical requirements. 
+•  Diagnosed operational and hardware/software issues in customer-facing equipment, delivering effective technical support under tight deadlines. 
+•  Maintained detailed maintenance logs, operational reports, and clear professional communication with clients and cross-functional teams. 
+
+### Education
+ St. Peter's Engineering College | Hyderabad, Telangana Bachelor of Technology B.Tech in Electrical and Electronics Engineering | 2022 – 2025 
+•  Relevant Coursework: Data Structures & Algorithms, Database Management Systems DBMS, Operating Systems, Object-Oriented Programming 
+
+=== PAGE 6 === TKR College of Engineering & Technology | Hyderabad, Telangana Diploma in Electrical and Electronics Engineering | 2019 – 2022 Sri Vijaya Sai High School | Nizamabad, Telangana Secondary School Certificate SSC – 10th Standard | Graduated: 2019 
+
+### Certifications
+ & Technical Training 
+•  Industrial Internship on Solar PV Systems & Automation – National Small Industries Corporation NSIC 
+•  Electric Circuit Analysis: Hands-on with MultiSim Live From Theory to Practice) – Technical Workshop 
+•  Technical Engineering Workshop – HIEE Empowering Engineers Pvt. Ltd. Problem Solving & Technical Development 
+•  Coding Platforms: Solved 200 coding problems across LeetCode and GeeksforGeeks, focusing on core data structures including Arrays, Strings, and Linked Lists. 
+•  Continuous Engineering: Active open-source and personal project contributor focusing on clean architecture, modular REST API design, and asynchronous event handling. Languages 
+•  English: Professional Working Proficiency 
+•  Telugu: Native Proficiency 
+•  Hindi: Full Professional Proficiency 

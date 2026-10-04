@@ -1,0 +1,82 @@
+import React from 'react';
+
+export const Projects: React.FC = () => {
+  return (
+    <section id="projects">
+      <div className="section-label">03 / Projects</div>
+      <h2 className="section-title reveal">Selected Work</h2>
+      <div className="projects-list">
+
+        <div className="project-card reveal">
+          <div>
+            <div className="project-num">Project_01</div>
+            <div className="project-name">NexusHR WorkforceOS</div>
+            <div className="project-desc">
+              Enterprise workforce management platform featuring Role-Based Access Control with Admin and Employee portals, task lifecycle management, leave approval workflows, real-time attendance tracking, and automated email delivery via Supabase SMTP.
+            </div>
+          </div>
+          <div className="project-tags">
+            <span className="project-tag">React 18</span>
+            <span className="project-tag">TypeScript</span>
+            <span className="project-tag">Supabase</span>
+            <span className="project-tag">PostgreSQL</span>
+            <span className="project-tag">Edge Functions</span>
+          </div>
+          <div className="project-arrow">↗</div>
+        </div>
+
+        <div className="project-card reveal">
+          <div>
+            <div className="project-num">Project_02</div>
+            <div className="project-name">Glowora Skincare</div>
+            <div className="project-desc">
+              Modern responsive e-commerce SPA for botanical skincare brand with category filtering, quick-view modals, and a lightweight static HTTP server engineered in pure Java 25 handling SPA fallback routing without external web server dependencies.
+            </div>
+          </div>
+          <div className="project-tags">
+            <span className="project-tag">Java 25</span>
+            <span className="project-tag">React 18</span>
+            <span className="project-tag">Vite 5</span>
+            <span className="project-tag">Tailwind CSS</span>
+          </div>
+          <div className="project-arrow">↗</div>
+        </div>
+
+        <div className="project-card reveal">
+          <div>
+            <div className="project-num">Project_03</div>
+            <div className="project-name">JoyBoyJutsu — AI Media Engine</div>
+            <div className="project-desc">
+              Fully autonomous multi-agent media pipeline that scrapes viral content, synthesizes structured copy via Google Gemini AI, renders 1080×1080px carousel slides, and auto-publishes to Instagram on a scheduled cron with fault-tolerant SQLite state tracking.
+            </div>
+          </div>
+          <div className="project-tags">
+            <span className="project-tag">Next.js 16</span>
+            <span className="project-tag">Gemini API</span>
+            <span className="project-tag">Node Canvas</span>
+            <span className="project-tag">Instagram API</span>
+          </div>
+          <div className="project-arrow">↗</div>
+        </div>
+
+        <div className="project-card reveal">
+          <div>
+            <div className="project-num">Project_04</div>
+            <div className="project-name">Library Management System</div>
+            <div className="project-desc">
+              Full-stack library management system with React UI and Spring Boot backend. Secure RESTful APIs with JWT-based auth, RBAC, Hibernate ORM, and optimized MySQL schemas for high-performance data retrieval.
+            </div>
+          </div>
+          <div className="project-tags">
+            <span className="project-tag">Spring Boot</span>
+            <span className="project-tag">React</span>
+            <span className="project-tag">MySQL</span>
+            <span className="project-tag">Spring Security</span>
+          </div>
+          <div className="project-arrow">↗</div>
+        </div>
+
+      </div>
+    </section>
+  );
+};
