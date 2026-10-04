@@ -167,7 +167,7 @@ const KNOWLEDGE_BASE: KnowledgeItem[] = [
     response:
       "**Resume & Professional CV:**\n\nYou can download Rahul's verified updated resume directly, or reach out via email for tailored CV requests.",
     links: [
-      { label: '📄 Download Resume (PDF)', url: '/resume.pdf' },
+      { label: '📄 Download Resume (PDF)', url: `${import.meta.env.BASE_URL}resume.pdf` },
       { label: 'Send Email Request', url: 'mailto:aleshwaramrahul@gmail.com?subject=Request%20for%20Resume' },
       { label: 'Contact Section', url: '#contact', isAction: true },
     ],
@@ -299,7 +299,7 @@ export const Chatbot: React.FC = () => {
       links: [
         { label: 'Technical Skills', url: '#skills', isAction: true },
         { label: 'Projects', url: '#projects', isAction: true },
-        { label: 'Download Resume', url: '/resume.pdf' },
+        { label: 'Download Resume', url: `${import.meta.env.BASE_URL}resume.pdf` },
         { label: 'Contact', url: '#contact', isAction: true },
       ],
     };
