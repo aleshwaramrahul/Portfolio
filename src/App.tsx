@@ -26,7 +26,7 @@ export const App: React.FC = () => {
   useFullpageScroll();
 
   const startHeroAnimation = () => {
-    // Fast, Snappy Hero Entrance Animations triggered right after preloader reveal
+    // Fast, Snappy Hero Entrance Animations triggered right as preloader dissolves
     const heroTl = gsap.timeline();
     heroTl
       .to('#hero-eyebrow', { opacity: 1, y: 0, duration: 0.5, delay: 0.1, ease: 'power2.out' })
@@ -77,7 +77,7 @@ export const App: React.FC = () => {
 
   return (
     <>
-      {/* Cinematic Name Reveal Preloader */}
+      {/* Sleek Boot Sequence Preloader */}
       <Preloader onComplete={startHeroAnimation} />
 
       {/* Interactive Cursor */}

@@ -5,15 +5,20 @@ interface PreloaderProps {
   onComplete?: () => void;
 }
 
+const CHARS = '0123456789ABCDEF$#@!*&%/=XYZ';
+const FIRST_NAME = 'ALESHWARAM';
+const LAST_NAME = 'RAHUL';
+
 export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
   const flareRef = useRef<HTMLDivElement>(null);
-  const progressTextRef = useRef<HTMLSpanElement>(null);
+  const counterRef = useRef<HTMLSpanElement>(null);
+  const statusRef = useRef<HTMLSpanElement>(null);
   const [hidden, setHidden] = useState(false);
 
   useEffect(() => {
-    // Disable Lenis / standard page scroll while preloader is active
+    // Lock scroll during preloader
     if ((window as any).__lenis) {
       (window as any).__lenis.stop();
     }
@@ -22,159 +27,149 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
     const container = containerRef.current;
     if (!container) return;
 
-    // Progress counter animation object
-    const counter = { val: 0 };
-    const progressEl = progressTextRef.current;
+    const charElements = Array.from(container.querySelectorAll<HTMLElement>('.decrypt-char'));
+    const counterEl = counterRef.current;
+    const statusEl = statusRef.current;
+    const counterObj = { val: 0 };
+
+    // Set initial scrambled characters
+    charElements.forEach((el) => {
+      el.textContent = CHARS[Math.floor(Math.random() * CHARS.length)];
+      el.classList.add('scrambling');
+    });
 
     const tl = gsap.timeline({
       onComplete: () => {
-        // Re-enable scrolling when done
         if ((window as any).__lenis) {
           (window as any).__lenis.start();
         }
         document.body.style.overflow = '';
         setHidden(true);
-        if (onComplete) onComplete();
       },
     });
 
-    // 1. Initial setup
-    gsap.set('.preloader-char', { y: '110%', opacity: 0, filter: 'blur(10px)' });
+    // 1. Initial visual setup
     gsap.set(lineRef.current, { scaleX: 0, opacity: 0 });
     gsap.set(flareRef.current, { scale: 0, opacity: 0 });
-    gsap.set('.preloader-sub', { opacity: 0, y: 15, filter: 'blur(6px)' });
-    gsap.set('.preloader-tag', { opacity: 0, y: -10 });
+    gsap.set('.preloader-meta-top', { opacity: 0, y: -10 });
+    gsap.set('.preloader-identity-wrapper', { opacity: 0, scale: 0.95 });
+    gsap.set('.preloader-meta-bottom', { opacity: 0, y: 10 });
     gsap.set('.preloader-hud-corner', { opacity: 0 });
 
-    // 2. Animate HUD markers and top badge
+    // 2. HUD corner accents and top telemetry reveal
     tl.to('.preloader-hud-corner', {
       opacity: 0.6,
-      duration: 0.5,
-      stagger: 0.05,
+      duration: 0.35,
+      stagger: 0.04,
       ease: 'power2.out',
     })
       .to(
-        '.preloader-tag',
+        ['.preloader-meta-top', '.preloader-identity-wrapper', '.preloader-meta-bottom'],
         {
           opacity: 1,
+          scale: 1,
           y: 0,
-          duration: 0.5,
+          duration: 0.45,
           ease: 'power3.out',
         },
-        '-=0.3'
+        '-=0.15'
       )
-
-      // 3. Counter tick-up from 00 to 100
-      .to(
-        counter,
-        {
-          val: 100,
-          duration: 1.6,
-          ease: 'power2.inOut',
-          onUpdate: () => {
-            if (progressEl) {
-              const num = Math.floor(counter.val);
-              progressEl.textContent = `${String(num).padStart(2, '0')}%`;
-            }
-          },
-        },
-        '-=0.4'
-      )
-
-      // 4. Staggered Cinematic Name Reveal
-      .to(
-        '.preloader-char',
-        {
-          y: '0%',
-          opacity: 1,
-          filter: 'blur(0px)',
-          duration: 0.9,
-          stagger: 0.035,
-          ease: 'power4.out',
-        },
-        '-=1.4'
-      )
-
-      // 5. Expand glowing horizon line & central flare
+      // 3. Expand glowing horizon line & beacon
       .to(
         lineRef.current,
         {
           scaleX: 1,
           opacity: 1,
-          duration: 0.8,
+          duration: 0.5,
           ease: 'power3.out',
         },
-        '-=0.8'
+        '-=0.25'
       )
       .to(
         flareRef.current,
         {
           scale: 1,
-          opacity: 0.9,
-          duration: 0.5,
+          opacity: 1,
+          duration: 0.35,
           ease: 'power2.out',
         },
-        '-=0.7'
+        '-=0.25'
       )
-
-      // 6. Subtitle reveal
+      // 4. Scramble & Decrypt Animation synced with 00% to 100% counter
       .to(
-        '.preloader-sub',
+        counterObj,
         {
-          opacity: 1,
-          y: 0,
-          filter: 'blur(0px)',
-          duration: 0.6,
-          ease: 'power3.out',
-        },
-        '-=0.5'
-      )
-
-      // 7. Light shimmer sweep
-      .to(
-        '.preloader-shimmer',
-        {
-          x: '200%',
-          duration: 0.85,
+          val: 100,
+          duration: 1.6,
           ease: 'power2.inOut',
+          onUpdate: () => {
+            const num = Math.floor(counterObj.val);
+            if (counterEl) {
+              counterEl.textContent = `${String(num).padStart(2, '0')}%`;
+            }
+
+            if (statusEl) {
+              if (num < 35) statusEl.textContent = 'DECRYPTING IDENTITY...';
+              else if (num < 80) statusEl.textContent = 'CALIBRATING SYNAPSE...';
+              else statusEl.textContent = 'IDENTITY VERIFIED // ONLINE';
+            }
+
+            // Lock in letters progressively according to percentage
+            const totalChars = charElements.length;
+            const threshold = (num / 100) * totalChars;
+
+            charElements.forEach((el, idx) => {
+              const target = el.getAttribute('data-final') || '';
+              if (idx <= threshold) {
+                if (el.textContent !== target) {
+                  el.textContent = target;
+                  el.classList.remove('scrambling');
+                  el.classList.add('locked');
+                }
+              } else {
+                // Keep scrambling upcoming characters
+                el.textContent = CHARS[Math.floor(Math.random() * CHARS.length)];
+              }
+            });
+          },
         },
-        '-=0.4'
+        '-=0.2'
       )
-
-      // 8. Settle pause for impact
-      .to({}, { duration: 0.35 })
-
-      // 9. Cinematic Curtain Slide & Fade Exit
-      .to(
-        '.preloader-content',
-        {
-          opacity: 0,
-          y: -25,
-          scale: 1.03,
-          filter: 'blur(8px)',
-          duration: 0.55,
-          ease: 'power3.in',
-        }
-      )
+      // 5. Grand flash of completion
+      .to('.preloader-identity-wrapper', {
+        filter: 'drop-shadow(0 0 25px rgba(255,255,255,0.95))',
+        duration: 0.2,
+        yoyo: true,
+        repeat: 1,
+        ease: 'power2.inOut',
+      })
+      // 6. Seamless dissolution into Hero section (ZERO blank pause)
+      .call(() => {
+        if (onComplete) onComplete();
+      })
       .to(
         container,
         {
-          yPercent: -100,
-          duration: 0.75,
-          ease: 'expo.inOut',
+          opacity: 0,
+          scale: 1.06,
+          filter: 'blur(8px)',
+          duration: 0.55,
+          ease: 'power3.inOut',
         },
-        '-=0.2'
+        '+=0.05'
       );
 
-    // Skip on click or key press
+    // Fast skip
     const handleSkip = () => {
-      tl.timeScale(3);
+      tl.timeScale(4);
     };
 
     window.addEventListener('keydown', handleSkip, { once: true });
+    container.addEventListener('click', handleSkip, { once: true });
 
     return () => {
       window.removeEventListener('keydown', handleSkip);
+      container.removeEventListener('click', handleSkip);
       tl.kill();
       if ((window as any).__lenis) {
         (window as any).__lenis.start();
@@ -185,17 +180,14 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
 
   if (hidden) return null;
 
-  const firstName = 'ALESHWARAM';
-  const lastName = 'RAHUL';
-
   return (
     <div
       id="cinematic-preloader"
       ref={containerRef}
-      className="preloader-overlay"
+      className="preloader-matrix-overlay"
       aria-label="Loading portfolio"
     >
-      {/* Background Aesthetic Atmosphere */}
+      {/* Ambient Sci-Fi Glow & Grid */}
       <div className="preloader-bg-glow" />
       <div className="preloader-grid" />
 
@@ -205,36 +197,44 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
       <div className="preloader-hud-corner bl" />
       <div className="preloader-hud-corner br" />
 
-      {/* Main Center Content */}
-      <div className="preloader-content">
-        {/* Top Tagline */}
-        <div className="preloader-tag">
-          <span className="preloader-tag-dot" />
-          <span className="preloader-tag-text">SYS // INITIALIZING IDENTITY</span>
+      {/* Main Content Center */}
+      <div className="preloader-matrix-stage">
+        {/* Top Header Telemetry */}
+        <div className="preloader-meta-top">
+          <div className="preloader-top-badge">
+            <span className="badge-pulse-dot" />
+            <span className="badge-title">SYS // QUANTUM IDENTITY BOOT</span>
+          </div>
+          <span className="preloader-top-loc">HYDERABAD, IN · 17.3850° N</span>
         </div>
 
-        {/* Cinematic Name Display */}
-        <div className="preloader-name-wrapper">
-          <div className="preloader-name">
-            <span className="preloader-word">
-              {firstName.split('').map((char, i) => (
-                <span key={`first-${i}`} className="preloader-char-box">
-                  <span className="preloader-char">{char}</span>
-                </span>
-              ))}
-            </span>
-            <span className="preloader-space">&nbsp;</span>
-            <span className="preloader-word">
-              {lastName.split('').map((char, i) => (
-                <span key={`last-${i}`} className="preloader-char-box">
-                  <span className="preloader-char">{char}</span>
-                </span>
-              ))}
-            </span>
+        {/* Dual-Tone Kinetic Decrypt Name */}
+        <div className="preloader-identity-wrapper">
+          {/* First Name: Solid Heavy Luxury Typography */}
+          <div className="preloader-name-row first-name-row">
+            {FIRST_NAME.split('').map((char, i) => (
+              <span key={`fn-${i}`} className="decrypt-char" data-final={char}>
+                {char}
+              </span>
+            ))}
           </div>
 
-          {/* Light sweep overlay */}
-          <div className="preloader-shimmer" />
+          {/* Last Name: Framed in Cyber Brackets with Neon Stencil Glow */}
+          <div className="preloader-name-row last-name-row">
+            <span className="name-bracket">[</span>
+            <div className="last-name-inner">
+              {LAST_NAME.split('').map((char, i) => (
+                <span
+                  key={`ln-${i}`}
+                  className="decrypt-char outline-char"
+                  data-final={char}
+                >
+                  {char}
+                </span>
+              ))}
+            </div>
+            <span className="name-bracket">]</span>
+          </div>
         </div>
 
         {/* Horizon Divider Line with Center Beacon */}
@@ -243,17 +243,24 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
           <div ref={flareRef} className="preloader-flare" />
         </div>
 
-        {/* Bottom Metadata & Counter */}
-        <div className="preloader-meta">
-          <span className="preloader-sub">SOFTWARE DEVELOPER &nbsp;·&nbsp; HYDERABAD</span>
-          <span ref={progressTextRef} className="preloader-counter">
-            00%
+        {/* Bottom Telemetry & Real-Time Counter */}
+        <div className="preloader-meta-bottom">
+          <span ref={statusRef} className="preloader-status-text">
+            DECRYPTING IDENTITY...
           </span>
+          <div className="preloader-counter-box">
+            <span className="counter-label">INDEX:</span>
+            <span ref={counterRef} className="preloader-counter-num">
+              00%
+            </span>
+          </div>
         </div>
       </div>
 
-      {/* Skip indicator */}
-      <div className="preloader-skip-hint">PRESS ANY KEY TO SKIP</div>
+      {/* Skip Prompt */}
+      <div className="preloader-skip-hint">CLICK OR PRESS ANY KEY TO ENTER</div>
     </div>
   );
 };
+
+export default Preloader;
