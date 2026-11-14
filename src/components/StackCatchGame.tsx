@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useCallback } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 
 interface TechItem {
   name: string;
@@ -40,68 +40,66 @@ const TECH_POOL = [
 
 export const StackCatchGame: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [score, setScore] = useState(0);
-  const [combo, setCombo] = useState(1);
-  const [lives, setLives] = useState(3);
-  const [gameOver, setGameOver] = useState(false);
+  
+  // UI Display states
+  const [displayScore, setDisplayScore] = useState(0);
+  const [displayLevel, setDisplayLevel] = useState(1);
+  const [displayCatches, setDisplayCatches] = useState(0);
+  const [targetCatches, setTargetCatches] = useState(10);
+  const [displayCombo, setDisplayCombo] = useState(1);
+  const [displayLives, setDisplayLives] = useState(3);
+  const [isGameOver, setIsGameOver] = useState(false);
+  const [levelUpText, setLevelUpText] = useState<string | null>(null);
   const [highScore, setHighScore] = useState(() => {
     return parseInt(localStorage.getItem('stack_catch_highscore') || '0', 10);
   });
 
-  const paddleRef = useRef({ x: 300, width: 110, height: 16 });
+  // Mutable Game State Refs (Zero canvas destruction / zero resets on state change)
+  const gameStateRef = useRef({
+    score: 0,
+    combo: 1,
+    lives: 3,
+    level: 1,
+    totalCatches: 0,
+    currentLevelCatches: 0,
+    catchesForNextLevel: 10, // Level 1 = 10, Level 2 = 20, Level 3 = 30...
+    speedMultiplier: 1.0,
+    spawnInterval: 1200, // Starts relaxed and speeds up per level
+    gameOver: false,
+    levelBannerTimer: 0,
+    highScore: parseInt(localStorage.getItem('stack_catch_highscore') || '0', 10),
+  });
+
+  const paddleRef = useRef({ x: 300, width: 120, height: 16 });
   const itemsRef = useRef<TechItem[]>([]);
   const particlesRef = useRef<Particle[]>([]);
   const lastSpawnRef = useRef(0);
-  const animFrameRef = useRef<number | null>(null);
 
   const resetGame = () => {
-    setScore(0);
-    setCombo(1);
-    setLives(3);
-    setGameOver(false);
+    gameStateRef.current.score = 0;
+    gameStateRef.current.combo = 1;
+    gameStateRef.current.lives = 3;
+    gameStateRef.current.level = 1;
+    gameStateRef.current.totalCatches = 0;
+    gameStateRef.current.currentLevelCatches = 0;
+    gameStateRef.current.catchesForNextLevel = 10;
+    gameStateRef.current.speedMultiplier = 1.0;
+    gameStateRef.current.spawnInterval = 1200;
+    gameStateRef.current.gameOver = false;
+    gameStateRef.current.levelBannerTimer = 0;
     itemsRef.current = [];
     particlesRef.current = [];
+
+    paddleRef.current.width = 120; // reset paddle size
+    setDisplayScore(0);
+    setDisplayLevel(1);
+    setDisplayCatches(0);
+    setTargetCatches(10);
+    setDisplayCombo(1);
+    setDisplayLives(3);
+    setIsGameOver(false);
+    setLevelUpText(null);
   };
-
-  // Continuous smooth pointer tracking directly on window so paddle never sticks/centers
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const onPointerMove = (clientX: number) => {
-      const rect = canvas.getBoundingClientRect();
-      // If mouse is within or reasonably near the canvas horizontal bounds
-      const canvasMouseX = ((clientX - rect.left) / rect.width) * canvas.width;
-      paddleRef.current.x = Math.max(
-        paddleRef.current.width / 2,
-        Math.min(canvas.width - paddleRef.current.width / 2, canvasMouseX)
-      );
-    };
-
-    const handleWindowMouseMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      if (e.clientY >= rect.top - 50 && e.clientY <= rect.bottom + 50) {
-        onPointerMove(e.clientX);
-      }
-    };
-
-    const handleWindowTouchMove = (e: TouchEvent) => {
-      if (e.touches[0]) {
-        const rect = canvas.getBoundingClientRect();
-        if (e.touches[0].clientY >= rect.top - 60 && e.touches[0].clientY <= rect.bottom + 60) {
-          onPointerMove(e.touches[0].clientX);
-        }
-      }
-    };
-
-    window.addEventListener('mousemove', handleWindowMouseMove);
-    window.addEventListener('touchmove', handleWindowTouchMove, { passive: true });
-
-    return () => {
-      window.removeEventListener('mousemove', handleWindowMouseMove);
-      window.removeEventListener('touchmove', handleWindowTouchMove);
-    };
-  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -110,32 +108,72 @@ export const StackCatchGame: React.FC<{ onClose: () => void }> = ({ onClose }) =
     if (!ctx) return;
 
     // Set canvas dimensions
-    const updateSize = () => {
+    const resizeCanvas = () => {
       if (canvas.parentElement) {
         canvas.width = canvas.parentElement.clientWidth;
         canvas.height = 360;
+        if (!paddleRef.current.x || paddleRef.current.x <= 0) {
+          paddleRef.current.x = canvas.width / 2;
+        }
       }
     };
-    updateSize();
+    resizeCanvas();
 
+    let animId: number;
     let isRunning = true;
 
+    // Direct pointer tracking on window & canvas
+    const updatePointerX = (clientX: number) => {
+      const rect = canvas.getBoundingClientRect();
+      const canvasX = ((clientX - rect.left) / rect.width) * canvas.width;
+      paddleRef.current.x = Math.max(
+        paddleRef.current.width / 2,
+        Math.min(canvas.width - paddleRef.current.width / 2, canvasX)
+      );
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      if (e.clientY >= rect.top - 80 && e.clientY <= rect.bottom + 80) {
+        updatePointerX(e.clientX);
+      }
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches[0]) {
+        const rect = canvas.getBoundingClientRect();
+        if (e.touches[0].clientY >= rect.top - 80 && e.touches[0].clientY <= rect.bottom + 80) {
+          updatePointerX(e.touches[0].clientX);
+        }
+      }
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+    window.addEventListener('resize', resizeCanvas);
+
     const spawnItem = (time: number) => {
-      if (time - lastSpawnRef.current < 900) return;
+      const state = gameStateRef.current;
+      if (time - lastSpawnRef.current < state.spawnInterval) return;
       lastSpawnRef.current = time;
 
       const template = TECH_POOL[Math.floor(Math.random() * TECH_POOL.length)];
+      
+      // Speed scales progressively with level
+      const baseVy = (Math.random() * 0.8 + 1.2) * state.speedMultiplier;
+      const baseVx = (Math.random() - 0.5) * (0.8 * state.speedMultiplier);
+
       const item: TechItem = {
         name: template.name,
-        points: template.points,
+        points: template.points * state.level,
         isSpecial: template.isSpecial,
-        x: Math.random() * (canvas.width - 80) + 40,
+        x: Math.random() * (canvas.width - 90) + 45,
         y: -20,
-        vx: (Math.random() - 0.5) * 1.2,
-        vy: Math.random() * 1.4 + 1.8,
+        vx: baseVx,
+        vy: baseVy,
         radius: 20,
         rotation: 0,
-        vRot: (Math.random() - 0.5) * 0.04,
+        vRot: (Math.random() - 0.5) * 0.03 * state.speedMultiplier,
       };
       itemsRef.current.push(item);
     };
@@ -158,6 +196,8 @@ export const StackCatchGame: React.FC<{ onClose: () => void }> = ({ onClose }) =
     const gameLoop = (time: number) => {
       if (!isRunning) return;
 
+      const state = gameStateRef.current;
+
       // ── Clear Canvas (Strict Monochrome / Black #000000) ──
       ctx.fillStyle = '#000000';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -179,7 +219,7 @@ export const StackCatchGame: React.FC<{ onClose: () => void }> = ({ onClose }) =
         ctx.stroke();
       }
 
-      if (!gameOver) {
+      if (!state.gameOver) {
         spawnItem(time);
       }
 
@@ -208,7 +248,7 @@ export const StackCatchGame: React.FC<{ onClose: () => void }> = ({ onClose }) =
       for (let i = itemsRef.current.length - 1; i >= 0; i--) {
         const item = itemsRef.current[i];
 
-        if (!gameOver) {
+        if (!state.gameOver) {
           item.x += item.vx;
           item.y += item.vy;
           item.rotation += item.vRot;
@@ -220,28 +260,53 @@ export const StackCatchGame: React.FC<{ onClose: () => void }> = ({ onClose }) =
 
           // Catch Collision with Paddle
           const inPaddleX =
-            item.x > paddle.x - paddle.width / 2 - 8 &&
-            item.x < paddle.x + paddle.width / 2 + 8;
+            item.x > paddle.x - paddle.width / 2 - 10 &&
+            item.x < paddle.x + paddle.width / 2 + 10;
           const hitPaddleY =
             item.y + item.radius >= paddleY &&
-            item.y - item.radius <= paddleY + paddle.height;
+            item.y - item.radius <= paddleY + paddle.height + 4;
 
           if (inPaddleX && hitPaddleY) {
             // Caught item!
             addParticles(item.x, paddleY, 14);
-            setCombo((c) => {
-              const nextCombo = c + 1;
-              const pointsGained = item.points * nextCombo;
-              setScore((s) => {
-                const newScore = s + pointsGained;
-                if (newScore > highScore) {
-                  setHighScore(newScore);
-                  localStorage.setItem('stack_catch_highscore', String(newScore));
-                }
-                return newScore;
-              });
-              return nextCombo;
-            });
+
+            state.combo += 1;
+            state.totalCatches += 1;
+            state.currentLevelCatches += 1;
+
+            const pointsGained = item.points * state.combo;
+            state.score += pointsGained;
+
+            // Check Level Progression (Catch 10 in Level 1, 20 in Level 2, 30 in Level 3...)
+            if (state.currentLevelCatches >= state.catchesForNextLevel) {
+              state.level += 1;
+              state.currentLevelCatches = 0;
+              state.catchesForNextLevel = state.level * 10;
+              state.speedMultiplier += 0.28; // Speed gently increases
+              state.spawnInterval = Math.max(550, 1200 - state.level * 120); // Faster spawn
+              
+              // Paddle gets slightly more challenging/sleeker
+              paddle.width = Math.max(76, 120 - (state.level - 1) * 8);
+
+              // Level up celebratory particles
+              addParticles(canvas.width / 2, canvas.height / 2, 28);
+              state.levelBannerTimer = 90; // Display for ~1.5 seconds
+              setLevelUpText(`LEVEL ${state.level} UNLOCKED // SPEED UP!`);
+              setTimeout(() => setLevelUpText(null), 1800);
+
+              setDisplayLevel(state.level);
+              setTargetCatches(state.catchesForNextLevel);
+            }
+
+            if (state.score > state.highScore) {
+              state.highScore = state.score;
+              localStorage.setItem('stack_catch_highscore', String(state.score));
+              setHighScore(state.score);
+            }
+
+            setDisplayScore(state.score);
+            setDisplayCombo(state.combo);
+            setDisplayCatches(state.currentLevelCatches);
 
             itemsRef.current.splice(i, 1);
             continue;
@@ -250,14 +315,16 @@ export const StackCatchGame: React.FC<{ onClose: () => void }> = ({ onClose }) =
           // Missed item (hit floor)
           if (item.y > canvas.height + 25) {
             itemsRef.current.splice(i, 1);
-            setCombo(1);
-            setLives((l) => {
-              const nextLives = l - 1;
-              if (nextLives <= 0) {
-                setGameOver(true);
-              }
-              return Math.max(0, nextLives);
-            });
+            state.combo = 1;
+            state.lives -= 1;
+
+            setDisplayCombo(1);
+            setDisplayLives(Math.max(0, state.lives));
+
+            if (state.lives <= 0) {
+              state.gameOver = true;
+              setIsGameOver(true);
+            }
             continue;
           }
         }
@@ -295,7 +362,7 @@ export const StackCatchGame: React.FC<{ onClose: () => void }> = ({ onClose }) =
         ctx.restore();
       }
 
-      // ── Draw Paddle (Crisp Cyber Magnetic Basket) ──
+      // ── Draw Paddle (Crisp Cyber Magnetic Basket at EXACT paddle.x) ──
       ctx.save();
       const px = paddle.x - paddle.width / 2;
       const py = paddleY;
@@ -326,15 +393,29 @@ export const StackCatchGame: React.FC<{ onClose: () => void }> = ({ onClose }) =
 
       // Paddle Center Tech Label
       ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-      ctx.font = '600 7.5px "Space Mono", monospace';
+      ctx.font = '600 7px "Space Mono", monospace';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText('[ RECEPTOR_DOCK ]', paddle.x, py + paddle.height / 2);
       ctx.restore();
 
+      // ── Level Up In-Game HUD Splash ──
+      if (state.levelBannerTimer > 0) {
+        state.levelBannerTimer -= 1;
+        ctx.save();
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '700 16px "Space Mono", monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(`⚡ LEVEL ${state.level} ⚡`, canvas.width / 2, canvas.height / 2 - 10);
+        ctx.font = '400 10px "Space Mono", monospace';
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+        ctx.fillText(`CATCH ${state.catchesForNextLevel} BADGES TO ADVANCE`, canvas.width / 2, canvas.height / 2 + 14);
+        ctx.restore();
+      }
+
       // ── Game Over Screen ──
-      if (gameOver) {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
+      if (state.gameOver) {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         ctx.fillStyle = '#ffffff';
@@ -344,32 +425,46 @@ export const StackCatchGame: React.FC<{ onClose: () => void }> = ({ onClose }) =
 
         ctx.font = '400 11px "Space Mono", monospace';
         ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-        ctx.fillText(`FINAL SCORE: ${score} · BEST: ${highScore}`, canvas.width / 2, canvas.height / 2 + 10);
+        ctx.fillText(
+          `SCORE: ${state.score} · LEVEL: ${state.level} · BEST: ${state.highScore}`,
+          canvas.width / 2,
+          canvas.height / 2 + 10
+        );
       }
 
-      animFrameRef.current = requestAnimationFrame(gameLoop);
+      animId = requestAnimationFrame(gameLoop);
     };
 
-    animFrameRef.current = requestAnimationFrame(gameLoop);
+    animId = requestAnimationFrame(gameLoop);
 
     return () => {
       isRunning = false;
-      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+      cancelAnimationFrame(animId);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('resize', resizeCanvas);
     };
-  }, [gameOver, score, highScore]);
+  }, []);
 
   return (
     <div className="stack-game-container">
       {/* Game Header HUD */}
       <div className="stack-game-hud">
         <div className="stack-game-hud-left">
-          <span className="stack-game-badge">STACK_CATCH v1.0</span>
+          <span className="stack-game-badge">LVL {displayLevel}</span>
+
           <span className="stack-game-metric">
-            SCORE: <strong>{score}</strong>
+            GOAL: <strong>{displayCatches} / {targetCatches}</strong>
           </span>
+
           <span className="stack-game-metric">
-            COMBO: <strong>x{combo}</strong>
+            SCORE: <strong>{displayScore}</strong>
           </span>
+
+          <span className="stack-game-metric">
+            COMBO: <strong>x{displayCombo}</strong>
+          </span>
+
           <span className="stack-game-metric">
             BEST: <strong>{highScore}</strong>
           </span>
@@ -381,14 +476,14 @@ export const StackCatchGame: React.FC<{ onClose: () => void }> = ({ onClose }) =
             {Array.from({ length: 3 }).map((_, idx) => (
               <span
                 key={idx}
-                className={`stack-game-heart ${idx < lives ? 'active' : 'lost'}`}
+                className={`stack-game-heart ${idx < displayLives ? 'active' : 'lost'}`}
               >
                 ●
               </span>
             ))}
           </div>
 
-          {gameOver && (
+          {isGameOver && (
             <button className="stack-game-btn" onClick={resetGame}>
               RETRY ↺
             </button>
@@ -402,11 +497,17 @@ export const StackCatchGame: React.FC<{ onClose: () => void }> = ({ onClose }) =
 
       {/* Interactive Game Canvas */}
       <div className="stack-game-canvas-wrap">
-        <canvas
-          ref={canvasRef}
-          className="stack-game-canvas"
-        />
-        <div className="stack-game-hint">SLIDE MOUSE / TOUCH TO CATCH TECH BADGES</div>
+        <canvas ref={canvasRef} className="stack-game-canvas" />
+        
+        {levelUpText && (
+          <div className="stack-game-level-up-toast">
+            {levelUpText}
+          </div>
+        )}
+
+        <div className="stack-game-hint">
+          LEVEL {displayLevel} · CATCH {displayCatches}/{targetCatches} TO LEVEL UP
+        </div>
       </div>
     </div>
   );

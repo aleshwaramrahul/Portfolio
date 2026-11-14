@@ -1560,6 +1560,33 @@ section {
   color: rgba(255, 255, 255, 0.35);
   pointer-events: none;
   text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.stack-game-level-up-toast {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #000000;
+  border: 1.5px solid #ffffff;
+  padding: 0.6rem 1.4rem;
+  border-radius: 4px;
+  color: #ffffff;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  pointer-events: none;
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.35);
+  animation: levelToastPop 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes levelToastPop {
+  0% { opacity: 0; transform: translate(-50%, -40%) scale(0.85); }
+  20% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+  80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -60%) scale(0.95); }
 }
 
 /* ─── PROJECTS (INTERACTIVE INSPECTOR LAYOUT - 100VH SNAP) ─── */
