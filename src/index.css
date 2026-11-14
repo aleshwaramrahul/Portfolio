@@ -1347,6 +1347,221 @@ section {
   color: #ffffff;
 }
 
+/* ─── SKILLS MINI-GAME LAUNCHER (STRICT MONOCHROME: BLACK & WHITE) ─── */
+.skills-game-launcher-row {
+  margin-top: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.skills-game-launch-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 1.1rem;
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  color: #ffffff;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+.skills-game-launch-btn:hover {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.25);
+}
+
+.skills-game-launch-btn.active {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: #ffffff;
+  color: #ffffff;
+}
+
+.skills-game-launch-dot {
+  font-size: 0.65rem;
+  color: #ffffff;
+  animation: whitePulse 2s infinite ease-in-out;
+}
+
+@keyframes whitePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.skills-game-launch-arrow {
+  font-size: 0.8rem;
+  transition: transform 0.22s ease;
+}
+
+.skills-game-launch-btn:hover .skills-game-launch-arrow {
+  transform: translate(2px, -2px);
+}
+
+/* ─── STACK CATCH MINI-GAME CONTAINER ─── */
+.skills-game-embed-wrap {
+  margin-top: 1.4rem;
+  width: 100%;
+  animation: gameSlideDown 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes gameSlideDown {
+  0% { opacity: 0; transform: translateY(-10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.stack-game-container {
+  width: 100%;
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 255, 255, 0.05);
+}
+
+.stack-game-hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+  background: rgba(12, 12, 14, 0.95);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.stack-game-hud-left {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.stack-game-badge {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #000000;
+  background: #ffffff;
+  padding: 0.2rem 0.5rem;
+  border-radius: 2px;
+}
+
+.stack-game-metric {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.stack-game-metric strong {
+  color: #ffffff;
+}
+
+.stack-game-hud-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.stack-game-lives {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.stack-game-heart {
+  font-size: 0.75rem;
+  transition: opacity 0.2s ease;
+}
+
+.stack-game-heart.active {
+  color: #ffffff;
+}
+
+.stack-game-heart.lost {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.stack-game-btn {
+  background: transparent;
+  border: 1px solid #ffffff;
+  color: #ffffff;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  padding: 0.3rem 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.stack-game-btn:hover {
+  background: #ffffff;
+  color: #000000;
+}
+
+.stack-game-close-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.6);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  padding: 0.3rem 0.65rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.stack-game-close-btn:hover {
+  border-color: #ffffff;
+  color: #ffffff;
+}
+
+.stack-game-canvas-wrap {
+  position: relative;
+  width: 100%;
+  height: 360px;
+  background: #000000;
+  cursor: crosshair;
+}
+
+.stack-game-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.stack-game-hint {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.35);
+  pointer-events: none;
+  text-transform: uppercase;
+}
+
 /* ─── PROJECTS (INTERACTIVE INSPECTOR LAYOUT - 100VH SNAP) ─── */
 #projects {
   border-top: 1px solid var(--border);

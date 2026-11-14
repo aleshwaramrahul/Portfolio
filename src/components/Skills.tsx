@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { VariableFontHoverWord } from './VariableFontHover';
+import { StackCatchGame } from './StackCatchGame';
 
 export const Skills: React.FC = () => {
+  const [isGameOpen, setIsGameOpen] = useState(false);
+
   return (
     <section id="skills">
       <div className="section-label reveal">02 / Skills</div>
@@ -92,6 +95,27 @@ export const Skills: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Launcher Button placed exactly at the bottom-left of the Skills Grid */}
+      <div className="skills-game-launcher-row reveal">
+        <button
+          type="button"
+          className={`skills-game-launch-btn ${isGameOpen ? 'active' : ''}`}
+          onClick={() => setIsGameOpen((prev) => !prev)}
+          title="Play Stack Catch Mini-Game"
+        >
+          <span className="skills-game-launch-dot">●</span>
+          <span>{isGameOpen ? 'CLOSE MINI-GAME ✕' : 'PLAY STACK CATCH 🎯'}</span>
+          <span className="skills-game-launch-arrow">↗</span>
+        </button>
+      </div>
+
+      {/* Embedded Game Section */}
+      {isGameOpen && (
+        <div className="skills-game-embed-wrap">
+          <StackCatchGame onClose={() => setIsGameOpen(false)} />
+        </div>
+      )}
     </section>
   );
 };
