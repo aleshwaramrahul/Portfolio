@@ -63,26 +63,44 @@ export const StackCatchGame: React.FC<{ onClose: () => void }> = ({ onClose }) =
     particlesRef.current = [];
   };
 
-  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
+  // Continuous smooth pointer tracking directly on window so paddle never sticks/centers
+  useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const rect = canvas.getBoundingClientRect();
-    const mouseX = ((e.clientX - rect.left) / rect.width) * canvas.width;
-    paddleRef.current.x = Math.max(
-      paddleRef.current.width / 2,
-      Math.min(canvas.width - paddleRef.current.width / 2, mouseX)
-    );
-  }, []);
 
-  const handleTouchMove = useCallback((e: React.TouchEvent<HTMLCanvasElement>) => {
-    const canvas = canvasRef.current;
-    if (!canvas || !e.touches[0]) return;
-    const rect = canvas.getBoundingClientRect();
-    const touchX = ((e.touches[0].clientX - rect.left) / rect.width) * canvas.width;
-    paddleRef.current.x = Math.max(
-      paddleRef.current.width / 2,
-      Math.min(canvas.width - paddleRef.current.width / 2, touchX)
-    );
+    const onPointerMove = (clientX: number) => {
+      const rect = canvas.getBoundingClientRect();
+      // If mouse is within or reasonably near the canvas horizontal bounds
+      const canvasMouseX = ((clientX - rect.left) / rect.width) * canvas.width;
+      paddleRef.current.x = Math.max(
+        paddleRef.current.width / 2,
+        Math.min(canvas.width - paddleRef.current.width / 2, canvasMouseX)
+      );
+    };
+
+    const handleWindowMouseMove = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      if (e.clientY >= rect.top - 50 && e.clientY <= rect.bottom + 50) {
+        onPointerMove(e.clientX);
+      }
+    };
+
+    const handleWindowTouchMove = (e: TouchEvent) => {
+      if (e.touches[0]) {
+        const rect = canvas.getBoundingClientRect();
+        if (e.touches[0].clientY >= rect.top - 60 && e.touches[0].clientY <= rect.bottom + 60) {
+          onPointerMove(e.touches[0].clientX);
+        }
+      }
+    };
+
+    window.addEventListener('mousemove', handleWindowMouseMove);
+    window.addEventListener('touchmove', handleWindowTouchMove, { passive: true });
+
+    return () => {
+      window.removeEventListener('mousemove', handleWindowMouseMove);
+      window.removeEventListener('touchmove', handleWindowTouchMove);
+    };
   }, []);
 
   useEffect(() => {
@@ -92,9 +110,13 @@ export const StackCatchGame: React.FC<{ onClose: () => void }> = ({ onClose }) =
     if (!ctx) return;
 
     // Set canvas dimensions
-    canvas.width = canvas.parentElement?.clientWidth || 700;
-    canvas.height = 360;
-    paddleRef.current.x = canvas.width / 2;
+    const updateSize = () => {
+      if (canvas.parentElement) {
+        canvas.width = canvas.parentElement.clientWidth;
+        canvas.height = 360;
+      }
+    };
+    updateSize();
 
     let isRunning = true;
 
@@ -383,8 +405,6 @@ export const StackCatchGame: React.FC<{ onClose: () => void }> = ({ onClose }) =
         <canvas
           ref={canvasRef}
           className="stack-game-canvas"
-          onMouseMove={handleMouseMove}
-          onTouchMove={handleTouchMove}
         />
         <div className="stack-game-hint">SLIDE MOUSE / TOUCH TO CATCH TECH BADGES</div>
       </div>
