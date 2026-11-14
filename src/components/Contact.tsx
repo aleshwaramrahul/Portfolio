@@ -239,6 +239,31 @@ export const Contact: React.FC = () => {
           OPEN TO FULL-TIME ROLES, FREELANCE, &amp; COLLABORATIONS
         </p>
         <div className="contact-links reveal">
+          <a
+            href={`${import.meta.env.BASE_URL}resume.pdf`}
+            className="contact-btn"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg
+              className="contact-btn-icon"
+              viewBox="0 0 24 24"
+              width="14"
+              height="14"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            <span>RESUME</span>
+            <span className="contact-btn-arrow">↓</span>
+          </a>
+
           <a href="mailto:aleshwaramrahul@gmail.com" className="contact-btn">
             <svg className="contact-btn-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect width="20" height="16" x="2" y="4" rx="2"/>
@@ -264,7 +289,7 @@ export const Contact: React.FC = () => {
             <span className="contact-btn-arrow">↗</span>
           </a>
 
-          <a href="https://linkedin.com" className="contact-btn" target="_blank" rel="noopener noreferrer">
+          <a href="https://www.linkedin.com/in/aleshwaramrahul" className="contact-btn" target="_blank" rel="noopener noreferrer">
             <svg className="contact-btn-icon" viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
               <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
             </svg>

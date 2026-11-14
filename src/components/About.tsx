@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { VariableFontHoverWord } from './VariableFontHover';
 
 export const About: React.FC = () => {
   const stageRef = useRef<HTMLDivElement>(null);
@@ -195,8 +196,22 @@ export const About: React.FC = () => {
       <div className="about-content-wrap">
         <div className="section-label reveal">01 / About</div>
         <h2 className="section-title reveal">
-          <span className="title-solid">DEVELOPER</span>{' '}
-          <span className="title-outline">PROFILE</span>
+          <VariableFontHoverWord
+            text="DEVELOPER"
+            className="title-solid"
+            fromWeight={400}
+            toWeight={900}
+            staggerDuration={35}
+            staggerFrom="first"
+          />
+          <VariableFontHoverWord
+            text="PROFILE"
+            className="title-outline"
+            fromWeight={400}
+            toWeight={900}
+            staggerDuration={35}
+            staggerFrom="first"
+          />
         </h2>
         <div className="about-grid">
           <div className="about-portrait-wrap reveal">

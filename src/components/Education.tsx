@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { GEO } from '../data/globeData';
+import { VariableFontHoverWord } from './VariableFontHover';
 
 export const Education: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -405,8 +406,22 @@ export const Education: React.FC = () => {
     <section id="education" ref={sectionRef}>
       <div className="section-label reveal">05 / Education</div>
       <h2 className="section-title reveal">
-        <span className="title-solid">ACADEMIC</span>{' '}
-        <span className="title-outline">BACKGROUND</span>
+        <VariableFontHoverWord
+          text="ACADEMIC"
+          className="title-solid"
+          fromWeight={400}
+          toWeight={900}
+          staggerDuration={35}
+          staggerFrom="first"
+        />
+        <VariableFontHoverWord
+          text="BACKGROUND"
+          className="title-outline"
+          fromWeight={400}
+          toWeight={900}
+          staggerDuration={35}
+          staggerFrom="first"
+        />
       </h2>
       <div className="edu-grid">
         <div className="edu-list">

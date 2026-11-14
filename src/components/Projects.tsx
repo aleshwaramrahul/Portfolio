@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { ClayRobot } from './ClayRobot';
+import { VariableFontHoverWord } from './VariableFontHover';
 
 interface Project {
   id: string;
@@ -162,8 +164,22 @@ export const Projects: React.FC = () => {
       <div className="section-label reveal">03 / Projects</div>
       
       <h2 className="section-title reveal">
-        <span className="title-solid">SELECTED</span>{' '}
-        <span className="title-outline">WORK</span>
+        <VariableFontHoverWord
+          text="SELECTED"
+          className="title-solid"
+          fromWeight={400}
+          toWeight={900}
+          staggerDuration={35}
+          staggerFrom="first"
+        />
+        <VariableFontHoverWord
+          text="WORK"
+          className="title-outline"
+          fromWeight={400}
+          toWeight={900}
+          staggerDuration={35}
+          staggerFrom="first"
+        />
       </h2>
 
       <div className="projects-interactive-wrap reveal">
@@ -244,6 +260,35 @@ export const Projects: React.FC = () => {
                 </svg>
                 REPO <span>↗</span>
               </a>
+
+              {/* Clay Robot walking along the bottom line of the marked place */}
+              <div className="project-card-robot-companion">
+                <ClayRobot
+                  transparent={true}
+                  colors={{
+                    clay: "#F9F9FD",
+                    visor: "#090909",
+                    eyes: "#FFFFFF"
+                  }}
+                  response={{
+                    track: "page",
+                    headTurn: 8,
+                    eyeTravel: 7,
+                    followSpeed: 7,
+                    hop: 7
+                  }}
+                  walk={true}
+                  walkSpeed={7}
+                  wave={true}
+                  blink={true}
+                  scale={65}
+                  style={{
+                    aspectRatio: 'auto',
+                    height: '100%',
+                    background: 'transparent'
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>

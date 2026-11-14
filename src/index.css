@@ -223,6 +223,60 @@ nav.scrolled {
   50% { opacity: 0.7; box-shadow: 0 0 0 4px rgba(74,222,128,0); }
 }
 
+
+.nav-resume-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.38rem 0.85rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 4px;
+  color: #ffffff;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-resume-btn:hover {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.35);
+  transform: translateY(-1px);
+}
+
+.nav-mobile-resume-link {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 0.75rem 0.85rem;
+  color: #ffffff;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 8px;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.nav-mobile-resume-link:hover,
+.nav-mobile-resume-link:active {
+  background: #ffffff;
+  color: #000000;
+}
+
+.nav-mobile-resume-link:hover .nav-num,
+.nav-mobile-resume-link:hover .nav-label {
+  color: #000000;
+}
+
 .nav-mobile-toggle {
   display: none;
   background: rgba(255, 255, 255, 0.05);
@@ -685,6 +739,11 @@ section {
   color: transparent;
   -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.88);
   letter-spacing: 0.05em;
+}
+
+.title-outline .variable-hover-letter {
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.88);
 }
 
 /* ─── ABOUT (CINEMATIC CAMERA + CURSOR LIGHT BACKGROUND - 100VH SNAP) ─── */
@@ -1442,6 +1501,44 @@ section {
   align-items: start;
 }
 
+/* ─── INTEGRATED CLAY ROBOT ON CARD'S BOTTOM LINE ─── */
+.project-card-actions {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.85rem;
+  margin-top: auto;
+  padding-top: 1.25rem;
+  position: relative;
+  min-height: 140px;
+}
+
+.project-card-robot-companion {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1.6rem;
+  height: 175px;
+  pointer-events: auto;
+  z-index: 2;
+  overflow: visible;
+}
+
+@media (max-width: 900px) {
+  .project-card-actions {
+    flex-direction: column;
+    align-items: flex-start;
+    min-height: auto;
+  }
+  .project-card-robot-companion {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    width: 100%;
+    height: 140px;
+    margin-top: 1rem;
+  }
+}
+
 @media (max-width: 1024px) {
   .projects-interactive-wrap {
     grid-template-columns: 240px 1fr;
@@ -1697,6 +1794,42 @@ section {
   line-height: 0;
 }
 
+.project-card-bullets li.progression-highlight-item {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  padding: 0.55rem 0.85rem;
+  margin: 0.2rem 0 0.5rem 0;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-left: 3px solid #ffffff;
+  border-radius: 6px;
+}
+
+.bullet-highlight-badge {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: #ffffff;
+  color: #000000;
+  padding: 0.22rem 0.55rem;
+  border-radius: 3px;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.bullet-text.highlight-emphasis {
+  color: #ffffff;
+  font-weight: 400;
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
 .project-card-divider {
   height: 1px;
   background: rgba(255, 255, 255, 0.1);
@@ -1747,12 +1880,7 @@ section {
 }
 
 .project-card-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
-  flex-wrap: wrap;
-  margin-top: auto;
-  padding-top: 1.25rem;
+  /* Styled in active inspector section */
 }
 
 .project-btn-view {
@@ -2947,6 +3075,211 @@ footer { display: none; }
   padding: 0.75rem 1.1rem;
   background: rgba(16, 16, 20, 0.9);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chatbot-mic-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.chatbot-mic-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.chatbot-mic-btn.listening {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: #ef4444;
+  animation: micPulse 1.2s infinite alternate;
+}
+
+@keyframes micPulse {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5); }
+  100% { transform: scale(1.08); box-shadow: 0 0 12px 2px rgba(239, 68, 68, 0.7); }
+}
+
+/* Fast-track top bar */
+.chatbot-fast-track-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.9rem;
+  background: rgba(22, 22, 28, 0.75);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.chatbot-fast-track-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.fast-track-chip {
+  padding: 0.3rem 0.65rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 9999px;
+  color: rgba(255, 255, 255, 0.88);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.62rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.fast-track-chip:hover {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+}
+
+.fast-track-chip.highlight {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.45);
+  color: #ffffff;
+}
+
+/* Header actions & Mute sound button */
+.chatbot-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.chatbot-icon-btn {
+  background: transparent;
+  border: none;
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 4px;
+  opacity: 0.7;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.chatbot-icon-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* Real-Time Token Streaming Cursor */
+.chatbot-streaming-cursor {
+  display: inline-block;
+  margin-left: 2px;
+  color: #ffffff;
+  animation: streamBlink 0.75s infinite;
+  font-weight: bold;
+}
+
+@keyframes streamBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Inline Tech Code Badges */
+.chatbot-inline-code {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+  padding: 0.1rem 0.35rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75em;
+  color: #ffffff;
+  margin: 0.1rem 0.2rem;
+}
+
+/* TTS Read Out Button */
+.chatbot-msg-tts-row {
+  margin-top: 0.45rem;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.chatbot-tts-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 4px;
+  padding: 0.25rem 0.55rem;
+  color: rgba(255, 255, 255, 0.65);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.58rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.chatbot-tts-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.chatbot-tts-btn.speaking {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: #ef4444;
+  color: #ffffff;
+}
+
+/* Dynamic Follow-Ups */
+.chatbot-followups {
+  margin-top: 0.7rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.chatbot-followup-label {
+  display: block;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 0.35rem;
+}
+
+.chatbot-followup-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.chatbot-followup-pill {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.85);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.62rem;
+  padding: 0.28rem 0.6rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.chatbot-followup-pill:hover {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+}
+
+/* Command Center Page Flash Highlight */
+.ai-command-highlight {
+  animation: aiFlashPulse 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes aiFlashPulse {
+  0% { outline: 2px solid rgba(255, 255, 255, 0.9); box-shadow: 0 0 30px rgba(255, 255, 255, 0.6); }
+  50% { outline: 2px solid rgba(255, 255, 255, 0.5); box-shadow: 0 0 15px rgba(255, 255, 255, 0.3); }
+  100% { outline: 2px solid transparent; box-shadow: none; }
 }
 
 .chatbot-input {

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { VariableFontHoverWord } from './VariableFontHover';
 
 interface ExperienceItem {
   id: string;
@@ -16,28 +17,31 @@ interface ExperienceItem {
 const EXPERIENCES_DATA: ExperienceItem[] = [
   {
     id: '01',
-    name: 'ASR DIGI SOLUTIONS PVT LTD',
+    name: 'ASR DIGI SOLUTIONS LTD',
     dates: 'SEP 2026 — PRESENT',
-    role: 'Associate Software Developer',
-    location: 'Hyderabad, Telangana, India (On-site)',
-    category: 'ASSOCIATE SOFTWARE DEVELOPER · FULL-TIME | HYDERABAD, INDIA',
+    role: 'Associate Software Engineer',
+    location: 'Hyderabad, Telangana, India',
+    category: 'ASSOCIATE SOFTWARE ENGINEER · FULL-TIME | HYDERABAD, TELANGANA',
     highlights: [
-      'Working on backend development for the EduGrow 360 CRM using Java, Spring Boot, Hibernate, and MySQL.',
-      'Developing and maintaining RESTful APIs and implementing CRUD operations for student and lead management.',
-      'Assisting with debugging, testing, and database query optimization to improve application performance and reliability.',
-      'Collaborating with the development team to enhance application functionality, usability, and system stability.',
-      'Supporting application deployment and resolving issues during development and production support.'
+      'Career Progression: Completed Internship and transitioned to a Full-Time Associate Software Engineer role.',
+      'Designing and developing responsive, user-friendly websites and web interfaces, contributing to frontend development and UI/UX improvements.',
+      'Contributing to ERP application development and enhancements using Java, Spring Boot, React, and Supabase.',
+      'Performing functional testing across multiple ERP modules to verify application behavior and data accuracy.',
+      'Validating web application records against Supabase database records to identify data mismatches.',
+      'Investigating data discrepancies across business modules and reporting technical findings to support issue resolution.',
+      'Creating and publishing engaging content across social media platforms, including post designing, content scheduling, and managing regular updates.'
     ],
     skills: [
       'Java',
       'Spring Boot',
-      'Hibernate',
-      'MySQL',
+      'React',
+      'Supabase',
+      'ERP Development',
+      'UI/UX Design',
+      'Functional Testing',
+      'Data Validation',
       'REST APIs',
-      'Backend Development',
-      'CRUD Operations',
-      'Debugging',
-      'Software Testing'
+      'Web Development'
     ],
     tools: [
       'Antigravity',
@@ -97,8 +101,22 @@ export const Experience: React.FC = () => {
       <div className="section-label reveal">04 / Experience</div>
       
       <h2 className="section-title reveal">
-        <span className="title-solid">PROFESSIONAL</span>{' '}
-        <span className="title-outline">JOURNEY</span>
+        <VariableFontHoverWord
+          text="PROFESSIONAL"
+          className="title-solid"
+          fromWeight={400}
+          toWeight={900}
+          staggerDuration={35}
+          staggerFrom="first"
+        />
+        <VariableFontHoverWord
+          text="JOURNEY"
+          className="title-outline"
+          fromWeight={400}
+          toWeight={900}
+          staggerDuration={35}
+          staggerFrom="first"
+        />
       </h2>
 
       <div className="projects-interactive-wrap reveal">
@@ -140,12 +158,24 @@ export const Experience: React.FC = () => {
             <div className="project-card-category">{activeExp.category}</div>
             
             <ul className="project-card-bullets">
-              {activeExp.highlights.map((point, i) => (
-                <li key={i}>
-                  <span className="bullet-dot">•</span>
-                  <span className="bullet-text">{point}</span>
-                </li>
-              ))}
+              {activeExp.highlights.map((point, i) => {
+                const isProgression = point.startsWith('Career Progression:');
+                if (isProgression) {
+                  const content = point.replace('Career Progression:', '').trim();
+                  return (
+                    <li key={i} className="progression-highlight-item">
+                      <span className="bullet-highlight-badge">CAREER PROGRESSION</span>
+                      <span className="bullet-text highlight-emphasis">{content}</span>
+                    </li>
+                  );
+                }
+                return (
+                  <li key={i}>
+                    <span className="bullet-dot">•</span>
+                    <span className="bullet-text">{point}</span>
+                  </li>
+                );
+              })}
             </ul>
 
             <div className="project-card-divider" />

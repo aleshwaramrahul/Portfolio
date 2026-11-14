@@ -1,12 +1,27 @@
 import React from 'react';
+import { VariableFontHoverWord } from './VariableFontHover';
 
 export const Skills: React.FC = () => {
   return (
     <section id="skills">
       <div className="section-label reveal">02 / Skills</div>
       <h2 className="section-title reveal">
-        <span className="title-solid">TECHNICAL</span>{' '}
-        <span className="title-outline">ARSENAL</span>
+        <VariableFontHoverWord
+          text="TECHNICAL"
+          className="title-solid"
+          fromWeight={400}
+          toWeight={900}
+          staggerDuration={35}
+          staggerFrom="first"
+        />
+        <VariableFontHoverWord
+          text="ARSENAL"
+          className="title-outline"
+          fromWeight={400}
+          toWeight={900}
+          staggerDuration={35}
+          staggerFrom="first"
+        />
       </h2>
       <div className="skills-grid reveal">
         <div className="skill-card">
